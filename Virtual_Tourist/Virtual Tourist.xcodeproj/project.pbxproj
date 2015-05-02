@@ -15,6 +15,7 @@
 		2CBC45E51E906567C540305B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CBC4DE77611CDDC7EFBC019 /* Main.storyboard */; };
 		2CBC464684CE311D4E7DD715 /* Virtual_Tourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC443FB0233CB9D2E185E4 /* Virtual_Tourist.xcdatamodeld */; };
 		2CBC46AE8866291902E16ECD /* AlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC4CB24CF4125282EDA9CB /* AlbumViewController.swift */; };
+		2CBC48FA943755DDDC282331 /* FlickrApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC4F908893FD31F8FEC33C /* FlickrApiClient.swift */; };
 		2CBC49D9C7A9CE57D3B146BD /* Virtual_TouristTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC4CEABB9C2A8FE629D10C /* Virtual_TouristTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		2CBC4D1E0131230223EB2353 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		2CBC4DCC75414CD5B08C853A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		2CBC4E6E87D0116B2CC11F32 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		2CBC4F908893FD31F8FEC33C /* FlickrApiClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrApiClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				2CBC4CE1DCF9A344F61895B5 /* Info.plist */,
+				2CBC4F908893FD31F8FEC33C /* FlickrApiClient.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 				2CBC464684CE311D4E7DD715 /* Virtual_Tourist.xcdatamodeld in Sources */,
 				2CBC42576A4237AEC8C7F410 /* MapViewController.swift in Sources */,
 				2CBC46AE8866291902E16ECD /* AlbumViewController.swift in Sources */,
+				2CBC48FA943755DDDC282331 /* FlickrApiClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

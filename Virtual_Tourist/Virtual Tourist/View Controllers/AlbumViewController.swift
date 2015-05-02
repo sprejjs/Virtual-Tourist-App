@@ -19,5 +19,14 @@ class AlbumViewController : UIViewController {
         mapView.showAnnotations([self.annotation!], animated: true)
         
         navigationController?.navigationBarHidden = false
+        
+        flickrApiClient.getPhotosForCoorinate(annotation!.coordinate, completionHandler:{
+            (urls:[String]) in
+        })
+    }
+    
+    private var flickrApiClient : FlickrApiClient {
+        var delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        return delegate.flickrApiClient
     }
 }
