@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		17A7B5A31AF5A4210031280C /* MapViewWithZoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7B5A21AF5A4210031280C /* MapViewWithZoom.swift */; };
+		17A7B5A51AF5B7A40031280C /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7B5A41AF5B7A40031280C /* PhotoCell.swift */; };
 		17D517011AD255BC00D11A15 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17D517001AD255BC00D11A15 /* MapKit.framework */; };
 		2CBC4162C1880EC1053E2E8B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CBC432D155D46FAFA2666A9 /* LaunchScreen.xib */; };
 		2CBC42576A4237AEC8C7F410 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC4D1E0131230223EB2353 /* MapViewController.swift */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		17A7B5A21AF5A4210031280C /* MapViewWithZoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewWithZoom.swift; sourceTree = "<group>"; };
+		17A7B5A41AF5B7A40031280C /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		17D517001AD255BC00D11A15 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2CBC419DB3EDE15FE121F779 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2CBC4225CD3DB9A1AD68B4C6 /* Virtual TouristTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Virtual TouristTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				17A7B5A21AF5A4210031280C /* MapViewWithZoom.swift */,
+				17A7B5A41AF5B7A40031280C /* PhotoCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17A7B5A51AF5B7A40031280C /* PhotoCell.swift in Sources */,
 				2CBC44AA2FD90E37A55A0D5C /* AppDelegate.swift in Sources */,
 				2CBC464684CE311D4E7DD715 /* Virtual_Tourist.xcdatamodeld in Sources */,
 				2CBC42576A4237AEC8C7F410 /* MapViewController.swift in Sources */,
