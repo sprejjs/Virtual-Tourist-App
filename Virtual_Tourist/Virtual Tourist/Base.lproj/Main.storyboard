@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="S6m-cv-yQL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="S6m-cv-yQL">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <scenes>
         <!--Map View Controller-->
@@ -87,23 +87,31 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="footer" id="qi9-5H-eEk">
+                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="footer" id="Lwi-MC-9ha">
                                     <rect key="frame" x="0.0" y="116" width="320" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9EN-Cs-P5w">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a9d-ey-0vA">
                                             <rect key="frame" x="108" y="10" width="104" height="30"/>
                                             <state key="normal" title="New Collection">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="newCollection" destination="nhu-zI-C7h" eventType="touchUpInside" id="PpU-wS-Mmc"/>
+                                                <action selector="newCollection" destination="nhu-zI-C7h" eventType="touchUpInside" id="PZU-yX-MUs"/>
                                             </connections>
                                         </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Images" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nMi-v1-2gA">
+                                            <rect key="frame" x="114" y="14" width="92" height="23"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="centerY" secondItem="9EN-Cs-P5w" secondAttribute="centerY" id="Stf-Hq-Lr3"/>
-                                        <constraint firstAttribute="centerX" secondItem="9EN-Cs-P5w" secondAttribute="centerX" id="mdA-jr-VtI"/>
+                                        <constraint firstAttribute="centerY" secondItem="a9d-ey-0vA" secondAttribute="centerY" id="93q-vW-9sO"/>
+                                        <constraint firstAttribute="centerY" secondItem="nMi-v1-2gA" secondAttribute="centerY" id="E0u-Qc-WL0"/>
+                                        <constraint firstAttribute="centerX" secondItem="nMi-v1-2gA" secondAttribute="centerX" id="MRO-8c-RT9"/>
+                                        <constraint firstAttribute="centerX" secondItem="a9d-ey-0vA" secondAttribute="centerX" id="qmE-Yk-4Ga"/>
                                     </constraints>
                                 </collectionReusableView>
                                 <connections>

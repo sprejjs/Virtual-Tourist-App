@@ -12,6 +12,7 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet weak var loadingOverlay: UIView!
     var btnNewCollection: UIButton?
+    var lblNoImages: UILabel?
     
     var annotation: MKAnnotation?
     var photoUrls: [String]?
@@ -67,6 +68,16 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         var newCollection = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "footer", forIndexPath: indexPath) as! UICollectionReusableView
         
         self.btnNewCollection = newCollection.subviews[0] as? UIButton
+        self.lblNoImages = newCollection.subviews[1] as? UILabel
+        
+        //Hide display elements
+        if photoUrls != nil && photoUrls!.count > 0 {
+            lblNoImages?.hidden = true
+            btnNewCollection?.hidden = false
+        } else {
+            lblNoImages?.hidden = false
+            btnNewCollection?.hidden = true
+        }
         
         return newCollection
     }
