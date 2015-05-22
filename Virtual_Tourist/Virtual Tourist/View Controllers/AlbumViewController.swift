@@ -121,6 +121,12 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         return cell
     }
     
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        photoUrls?.removeAtIndex(indexPath.item)
+        photosCache?.removeAtIndex(indexPath.item)
+        self.collectionView.reloadData()
+    }
+    
     private var allImagesLoaded: Bool {
         var loaded = true
         for (var i = 0; i < photosCache!.count; i++){
