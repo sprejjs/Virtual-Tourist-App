@@ -6,6 +6,7 @@
 import Foundation
 import UIKit
 import MapKit
+import CoreData
 
 class MapViewController : UIViewController, MKMapViewDelegate {
     //Key used for data persistance
@@ -24,6 +25,9 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         //Restore previous MapView position
         restoreMapViewPosition()
+        
+        //Fetch albums
+        restoreAlbumAnnotations()
     }
     
     private func restoreMapViewPosition(){
@@ -45,6 +49,19 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         }
     }
     
+    private func restoreAlbumAnnotations(){
+        //Clear old annotations
+        self.mapView.removeAnnotations(self.mapView.annotations)
+        
+        //Fetch new annotations from the core data
+        let fetchRequest = NSFetchRequest(entityName: "Album")
+        let results = sharedContext.executeFetchRequest(fetchRequest, error: nil) as! [Album]!
+        
+        for (var i = 0; i<results.count; i++){
+            self.mapView.addAnnotation(results[i].annotation)
+        }
+    }
+    
     func initialiseLongPressRecogniser(){
         var longPressRecogniser = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
 
@@ -58,11 +75,10 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         let touchPoint = getstureRecognizer.locationInView(mapView)
         let touchMapCoordinate = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
         
-        let annotation = MKPointAnnotation()
-        annotation.title = "Test"
-        annotation.coordinate = touchMapCoordinate
+        let album = Album(coordinate: touchMapCoordinate, context: sharedContext)
 
-        mapView.addAnnotation(annotation)
+        mapView.addAnnotation(album.annotation)
+        sharedContext.save(nil)
     }
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
@@ -123,5 +139,11 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         for (var i = 0; i < selectedAnnotations.count; i++){
             mapView.deselectAnnotation(selectedAnnotations[i], animated: false)
         }
+    }
+    
+    
+    var sharedContext: NSManagedObjectContext {
+        let appDeleate = UIApplication.sharedApplication().delegate as! AppDelegate
+        return appDeleate.managedObjectContext!
     }
 }
