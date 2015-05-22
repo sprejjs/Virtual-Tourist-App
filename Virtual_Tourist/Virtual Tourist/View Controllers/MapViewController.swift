@@ -95,6 +95,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         if(segue.identifier == "toAlbum") {
             let destinationController = segue.destinationViewController as? AlbumViewController
             destinationController!.annotation = selectedAnnotation
+            deselectAllAnnotations()
         }
     }
     
@@ -113,6 +114,14 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         //3 - camera rotation angle
         defaults.setObject(mapView.camera.heading, forKey: KEY_MAP_VIEW_ROTATION_ANGLE)
+    }
+    
+    func deselectAllAnnotations(){
         
+        let selectedAnnotations = mapView.selectedAnnotations as! [MKAnnotation];
+
+        for (var i = 0; i < selectedAnnotations.count; i++){
+            mapView.deselectAnnotation(selectedAnnotations[i], animated: false)
+        }
     }
 }
