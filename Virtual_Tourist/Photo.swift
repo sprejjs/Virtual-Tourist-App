@@ -4,6 +4,23 @@
 //
 
 import Foundation
+import CoreData
 
-class Photo {
+@objc(Photo)
+class Photo: NSManagedObject {
+    @NSManaged var url: String
+    @NSManaged var image: NSData?
+    @NSManaged var id: Int
+    @NSManaged var album: Album?
+    
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
+    
+    init(url: String, context: NSManagedObjectContext){
+        let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
+        super.init(entity:entity, insertIntoManagedObjectContext: context)
+        self.url = url
+        self.image = nil
+    }
 }

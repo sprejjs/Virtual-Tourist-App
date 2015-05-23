@@ -6,6 +6,7 @@
 import Foundation
 import UIKit
 import MapKit
+import CoreData
 
 class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     @IBOutlet var mapView: MKMapView!
@@ -15,8 +16,6 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     var lblNoImages: UILabel?
     
     var album: Album!
-    var photoUrls: [String]?
-    var photosCache: [UIImage?]?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -30,20 +29,14 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     private func retrieveNewCollection() {
-        photoUrls = nil
-        photosCache = nil
         loadingOverlay.hidden = false
         
         album.getPhotos({
-            (urls:[String]) in
+            (photos:[Photo]) in
             
             //Hide loading overlay with animation
             UIView.transitionWithView(self.loadingOverlay, duration: NSTimeInterval(0.4), options: UIViewAnimationOptions.TransitionCrossDissolve, animations: {}, completion: {(finished: Bool) -> () in })
             self.loadingOverlay.hidden = true
-            
-            //Update model
-            self.photoUrls = urls
-            self.photosCache = [UIImage?](count:urls.count, repeatedValue: nil)
             
             //Reload collection view
             self.collectionView.reloadData()
@@ -51,10 +44,10 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if photoUrls == nil {
+        if album.photos == nil {
             return 0
         } else {
-            return photoUrls!.count
+            return album.photos!.count
         }
     }
     
@@ -66,7 +59,7 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         self.lblNoImages = newCollection.subviews[1] as? UILabel
         
         //Hide display elements
-        if photoUrls != nil && photoUrls!.count > 0 {
+        if album.photos != nil && album.photos!.count > 0 {
             lblNoImages?.hidden = true
             btnNewCollection?.hidden = false
         } else {
@@ -83,17 +76,20 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! PhotoCell
         
         //Check the cache
-        if let imageFromCache = photosCache![indexPath.item] {
-            cell.imageView.image = imageFromCache
+        if let imageFromCache = album.photos![indexPath.item].image {
+            let image = UIImage(data: imageFromCache)
+            cell.imageView.image = image
+            cell.loadingOverlay.stopAnimating()
             cell.loadingOverlay.hidden = true
         } else {
             //Asyncrhoniously load image from URL:
-            var imageUrl = NSURL(string: photoUrls![indexPath.item])
+            var imageUrl = NSURL(string: album.photos![indexPath.item].url)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
                 var image = UIImage(data: NSData(contentsOfURL: imageUrl!)!)
                 
                 //update cache
-                self.photosCache![indexPath.item] = image
+                self.album.photos![indexPath.item].image = UIImagePNGRepresentation(image);
+                self.sharedContext.save(nil)
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     
@@ -107,7 +103,9 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
                         updateCell.loadingOverlay.hidden = true
                         
                         //Enable "New Collection" button if all of the images have been loaded
-                        self.btnNewCollection!.enabled = self.allImagesLoaded
+                        if self.btnNewCollection != nil {
+                            self.btnNewCollection!.enabled = self.allImagesLoaded
+                        }
                     }
                 })
             })
@@ -117,15 +115,15 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        photoUrls?.removeAtIndex(indexPath.item)
-        photosCache?.removeAtIndex(indexPath.item)
-        self.collectionView.reloadData()
+        album.photos![indexPath.item].album = nil
+        collectionView.reloadData()
+        sharedContext.save(nil)
     }
     
     private var allImagesLoaded: Bool {
         var loaded = true
-        for (var i = 0; i < photosCache!.count; i++){
-            if photosCache![i] == nil {
+        for (var i = 0; i < album.photos!.count; i++){
+            if album.photos![i].image == nil {
                 loaded = false
             }
         }
@@ -135,5 +133,10 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     @IBAction func newCollection() {
         retrieveNewCollection()
+    }
+    
+    private var sharedContext: NSManagedObjectContext {
+        let appDeleate = UIApplication.sharedApplication().delegate as! AppDelegate
+        return appDeleate.managedObjectContext!
     }
 }

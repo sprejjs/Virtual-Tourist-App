@@ -59,9 +59,6 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         albums = sharedContext.executeFetchRequest(fetchRequest, error: nil) as! [Album]!
         
         self.mapView.addAnnotations(albums)
-//        for (var i = 0; i < albums!.count; i++){
-//            self.mapView.addAnnotation(albums![i].annotation)
-//        }
     }
     
     func initialiseLongPressRecogniser(){
