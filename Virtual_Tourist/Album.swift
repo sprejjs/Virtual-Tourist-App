@@ -7,7 +7,7 @@ import CoreData
 import MapKit
 
 @objc(Album)
-class Album: NSManagedObject {
+class Album: NSManagedObject, MKAnnotation {
     @NSManaged var latitude: Double
     @NSManaged var longitude: Double
     @NSManaged var id: Int
@@ -22,12 +22,27 @@ class Album: NSManagedObject {
         self.longitude = Double(coordinate.longitude)
         self.latitude = Double(coordinate.latitude)
     }
-
-    var annotation: MKAnnotation {
-        let annotation = MKPointAnnotation()
-        annotation.title = "\(id)"
-        annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-
-        return annotation
+    
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    
+    var title: String {
+        return "\(id)"
+    }
+    
+    func getPhotos(completionHandler: (urls: [String]) -> Void){
+        flickrApiClient.getPhotosForCoorinate(coordinate, completionHandler:{
+            (urls:[String]) in
+            dispatch_async(dispatch_get_main_queue(),{
+                completionHandler(urls: urls)
+            });
+        });
+    }
+        
+        
+    private var flickrApiClient : FlickrApiClient {
+        var delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        return delegate.flickrApiClient
     }
 }

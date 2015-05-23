@@ -16,7 +16,8 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     private let KEY_MAP_VIEW_ROTATION_ANGLE = "key_map_view_rotation_angle"
     
     @IBOutlet var mapView : MapViewWithZoom!
-    var selectedAnnotation : MKAnnotation?
+    var selectedAlbum : Album?
+    var albums: [Album]?
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -55,11 +56,12 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         //Fetch new annotations from the core data
         let fetchRequest = NSFetchRequest(entityName: "Album")
-        let results = sharedContext.executeFetchRequest(fetchRequest, error: nil) as! [Album]!
+        albums = sharedContext.executeFetchRequest(fetchRequest, error: nil) as! [Album]!
         
-        for (var i = 0; i<results.count; i++){
-            self.mapView.addAnnotation(results[i].annotation)
-        }
+        self.mapView.addAnnotations(albums)
+//        for (var i = 0; i < albums!.count; i++){
+//            self.mapView.addAnnotation(albums![i].annotation)
+//        }
     }
     
     func initialiseLongPressRecogniser(){
@@ -77,7 +79,8 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         let album = Album(coordinate: touchMapCoordinate, context: sharedContext)
 
-        mapView.addAnnotation(album.annotation)
+        mapView.addAnnotation(album)
+        albums!.append(album)
         sharedContext.save(nil)
     }
     
@@ -103,14 +106,14 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     }
     
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
-        selectedAnnotation = view.annotation
+        selectedAlbum = view.annotation as? Album
         performSegueWithIdentifier("toAlbum", sender: self)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if(segue.identifier == "toAlbum") {
             let destinationController = segue.destinationViewController as? AlbumViewController
-            destinationController!.annotation = selectedAnnotation
+            destinationController!.album = selectedAlbum
             deselectAllAnnotations()
         }
     }
@@ -139,8 +142,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         for (var i = 0; i < selectedAnnotations.count; i++){
             mapView.deselectAnnotation(selectedAnnotations[i], animated: false)
         }
-    }
-    
+    }    
     
     var sharedContext: NSManagedObjectContext {
         let appDeleate = UIApplication.sharedApplication().delegate as! AppDelegate

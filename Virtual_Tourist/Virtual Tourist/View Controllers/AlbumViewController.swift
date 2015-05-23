@@ -14,15 +14,15 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     var btnNewCollection: UIButton?
     var lblNoImages: UILabel?
     
-    var annotation: MKAnnotation?
+    var album: Album!
     var photoUrls: [String]?
     var photosCache: [UIImage?]?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        mapView.addAnnotation(self.annotation!)
-        mapView.showAnnotations([self.annotation!], animated: true)
+        mapView.addAnnotation(album)
+        mapView.showAnnotations([album], animated: true)
         
         navigationController?.navigationBarHidden = false
         
@@ -34,7 +34,7 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         photosCache = nil
         loadingOverlay.hidden = false
         
-        flickrApiClient.getPhotosForCoorinate(annotation!.coordinate, completionHandler:{
+        album.getPhotos({
             (urls:[String]) in
             
             //Hide loading overlay with animation
@@ -47,12 +47,7 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
             
             //Reload collection view
             self.collectionView.reloadData()
-        })
-    }
-    
-    private var flickrApiClient : FlickrApiClient {
-        var delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        return delegate.flickrApiClient
+        });
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
