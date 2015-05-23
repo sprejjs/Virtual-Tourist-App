@@ -66,4 +66,11 @@ class Album: NSManagedObject, MKAnnotation {
         let appDeleate = UIApplication.sharedApplication().delegate as! AppDelegate
         return appDeleate.managedObjectContext!
     }
+    
+    func removeAllPhotos(){
+        var n = photos!.count
+        while (photos!.count > 0) {
+            photos![0].album = nil
+        }
+    }
 }

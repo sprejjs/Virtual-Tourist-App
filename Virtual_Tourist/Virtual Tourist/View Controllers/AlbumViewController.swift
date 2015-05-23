@@ -132,6 +132,7 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     @IBAction func newCollection() {
+        album.removeAllPhotos()
         retrieveNewCollection()
     }
     

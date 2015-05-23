@@ -17,5 +17,6 @@ class PhotoCell: UICollectionViewCell {
     override func prepareForReuse() {
         imageView.image = nil
         loadingOverlay.hidden = false
+        loadingOverlay.startAnimating()
     }
 }
