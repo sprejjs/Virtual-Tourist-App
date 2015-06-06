@@ -76,9 +76,9 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! PhotoCell
         
         //Check the cache
-        if let imageFromCache = album.photos![indexPath.item].image {
-            let image = UIImage(data: imageFromCache)
-            cell.imageView.image = image
+        let imageId = self.album.photos![indexPath.item].objectID.URIRepresentation().lastPathComponent!
+        if let imageFromCache = AppDelegate.Cache.imageCache.imageWithIdentifier(imageId) {
+            cell.imageView.image = imageFromCache
             cell.loadingOverlay.stopAnimating()
             cell.loadingOverlay.hidden = true
         } else {
@@ -87,9 +87,10 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
                 var image = UIImage(data: NSData(contentsOfURL: imageUrl!)!)
                 
-                //update cache
-                self.album.photos![indexPath.item].image = UIImagePNGRepresentation(image);
-                self.sharedContext.save(nil)
+                //update cache                
+                if let id = self.album.photos![indexPath.item].objectID.URIRepresentation().lastPathComponent {
+                    AppDelegate.Cache.imageCache.storeImage(image, withIdentifier: id)
+                }
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     
@@ -115,6 +116,12 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        //Delete the image from cache
+        if let id = self.album.photos![indexPath.item].objectID.URIRepresentation().lastPathComponent {
+            AppDelegate.Cache.imageCache.storeImage(nil, withIdentifier: id)
+        }
+        
+        //Remove core data object
         album.photos![indexPath.item].album = nil
         collectionView.reloadData()
         sharedContext.save(nil)
@@ -123,7 +130,8 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     private var allImagesLoaded: Bool {
         var loaded = true
         for (var i = 0; i < album.photos!.count; i++){
-            if album.photos![i].image == nil {
+            let imageId = self.album.photos![i].objectID.URIRepresentation().lastPathComponent!
+            if AppDelegate.Cache.imageCache.imageWithIdentifier(imageId) == nil {
                 loaded = false
             }
         }

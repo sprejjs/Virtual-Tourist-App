@@ -9,8 +9,6 @@ import CoreData
 @objc(Photo)
 class Photo: NSManagedObject {
     @NSManaged var url: String
-    @NSManaged var image: NSData?
-    @NSManaged var id: Int
     @NSManaged var album: Album?
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -21,6 +19,5 @@ class Photo: NSManagedObject {
         let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
         super.init(entity:entity, insertIntoManagedObjectContext: context)
         self.url = url
-        self.image = nil
     }
 }

@@ -10,7 +10,6 @@ import MapKit
 class Album: NSManagedObject, MKAnnotation {
     @NSManaged var latitude: Double
     @NSManaged var longitude: Double
-    @NSManaged var id: Int
     @NSManaged var photos: [Photo]?
 
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -30,7 +29,7 @@ class Album: NSManagedObject, MKAnnotation {
     }
     
     var title: String {
-        return "\(id)"
+        return "\(objectID)"
     }
     
     func getPhotos(completionHandler: (photos: [Photo]) -> Void){
