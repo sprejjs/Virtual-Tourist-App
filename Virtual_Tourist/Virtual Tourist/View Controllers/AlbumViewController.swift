@@ -17,33 +17,33 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     var album: Album!
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         mapView.addAnnotation(album)
         mapView.showAnnotations([album], animated: true)
         
-        navigationController?.navigationBarHidden = false
+        navigationController?.isNavigationBarHidden = false
         
         retrieveNewCollection()
     }
     
-    private func retrieveNewCollection() {
-        loadingOverlay.hidden = false
+    fileprivate func retrieveNewCollection() {
+        loadingOverlay.isHidden = false
         
         album.getPhotos({
             (photos:[Photo]) in
             
             //Hide loading overlay with animation
-            UIView.transitionWithView(self.loadingOverlay, duration: NSTimeInterval(0.4), options: UIViewAnimationOptions.TransitionCrossDissolve, animations: {}, completion: {(finished: Bool) -> () in })
-            self.loadingOverlay.hidden = true
+            UIView.transition(with: self.loadingOverlay, duration: TimeInterval(0.4), options: UIViewAnimationOptions.transitionCrossDissolve, animations: {}, completion: {(finished: Bool) -> () in })
+            self.loadingOverlay.isHidden = true
             
             //Reload collection view
             self.collectionView.reloadData()
         });
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if album.photos == nil {
             return 0
         } else {
@@ -51,61 +51,60 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
     }
     
-    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        var newCollection = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "footer", forIndexPath: indexPath) as! UICollectionReusableView
+        let newCollection = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath) 
         
         self.btnNewCollection = newCollection.subviews[0] as? UIButton
         self.lblNoImages = newCollection.subviews[1] as? UILabel
         
         //Hide display elements
         if album.photos != nil && album.photos!.count > 0 {
-            lblNoImages?.hidden = true
-            btnNewCollection?.hidden = false
+            lblNoImages?.isHidden = true
+            btnNewCollection?.isHidden = false
         } else {
-            lblNoImages?.hidden = false
-            btnNewCollection?.hidden = true
+            lblNoImages?.isHidden = false
+            btnNewCollection?.isHidden = true
         }
         
         return newCollection
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         //Deque cell
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! PhotoCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoCell
         
         //Check the cache
-        let imageId = self.album.photos![indexPath.item].objectID.URIRepresentation().lastPathComponent!
+        let imageId = self.album.photos![indexPath.item].objectID.uriRepresentation().lastPathComponent
         if let imageFromCache = AppDelegate.Cache.imageCache.imageWithIdentifier(imageId) {
             cell.imageView.image = imageFromCache
             cell.loadingOverlay.stopAnimating()
-            cell.loadingOverlay.hidden = true
+            cell.loadingOverlay.isHidden = true
         } else {
             //Asyncrhoniously load image from URL:
-            var imageUrl = NSURL(string: album.photos![indexPath.item].url)
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
-                var image = UIImage(data: NSData(contentsOfURL: imageUrl!)!)
+            let imageUrl = URL(string: album.photos![indexPath.item].url)
+            DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async(execute: {
+                let image = UIImage(data: try! Data(contentsOf: imageUrl!))
                 
                 //update cache                
-                if let id = self.album.photos![indexPath.item].objectID.URIRepresentation().lastPathComponent {
-                    AppDelegate.Cache.imageCache.storeImage(image, withIdentifier: id)
-                }
+                let id = self.album.photos![indexPath.item].objectID.uriRepresentation().lastPathComponent
+                AppDelegate.Cache.imageCache.storeImage(image, withIdentifier: id)
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     
                     //Check if this is still the right cell and not a re-used one
-                    if let updateCell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotoCell {
+                    if let updateCell = collectionView.cellForItem(at: indexPath) as? PhotoCell {
                         //Display loaded image
                         updateCell.imageView.image = image
                         
                         //Hide loading overla with animation
-                        UIView.transitionWithView(cell.loadingOverlay, duration: NSTimeInterval(0.4), options: UIViewAnimationOptions.TransitionCrossDissolve, animations: {}, completion: {(finished: Bool) -> () in })
-                        updateCell.loadingOverlay.hidden = true
+                        UIView.transition(with: cell.loadingOverlay, duration: TimeInterval(0.4), options: UIViewAnimationOptions.transitionCrossDissolve, animations: {}, completion: {(finished: Bool) -> () in })
+                        updateCell.loadingOverlay.isHidden = true
                         
                         //Enable "New Collection" button if all of the images have been loaded
                         if self.btnNewCollection != nil {
-                            self.btnNewCollection!.enabled = self.allImagesLoaded
+                            self.btnNewCollection!.isEnabled = self.allImagesLoaded
                         }
                     }
                 })
@@ -115,22 +114,23 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //Delete the image from cache
-        if let id = self.album.photos![indexPath.item].objectID.URIRepresentation().lastPathComponent {
-            AppDelegate.Cache.imageCache.storeImage(nil, withIdentifier: id)
-        }
+        let id = self.album.photos![indexPath.item].objectID.uriRepresentation().lastPathComponent
+        AppDelegate.Cache.imageCache.storeImage(nil, withIdentifier: id)
         
         //Remove core data object
         album.photos![indexPath.item].album = nil
         collectionView.reloadData()
-        sharedContext.save(nil)
+        try! sharedContext.save()
     }
     
-    private var allImagesLoaded: Bool {
+    fileprivate var allImagesLoaded: Bool {
         var loaded = true
-        for (var i = 0; i < album.photos!.count; i++){
-            let imageId = self.album.photos![i].objectID.URIRepresentation().lastPathComponent!
+        
+        for photo in album.photos! {
+            let imageId = photo.objectID.uriRepresentation().lastPathComponent
+            
             if AppDelegate.Cache.imageCache.imageWithIdentifier(imageId) == nil {
                 loaded = false
             }
@@ -144,8 +144,8 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         retrieveNewCollection()
     }
     
-    private var sharedContext: NSManagedObjectContext {
-        let appDeleate = UIApplication.sharedApplication().delegate as! AppDelegate
+    fileprivate var sharedContext: NSManagedObjectContext {
+        let appDeleate = UIApplication.shared.delegate as! AppDelegate
         return appDeleate.managedObjectContext!
     }
 }

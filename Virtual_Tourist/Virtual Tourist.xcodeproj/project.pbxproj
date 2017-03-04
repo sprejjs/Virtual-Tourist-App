@@ -209,6 +209,14 @@
 			isa = PBXProject;
 			attributes = {
 				ORGANIZATIONNAME = Spreys.com;
+				TargetAttributes = {
+					2CBC431CB15A5C865D83457D = {
+						LastSwiftMigration = 0820;
+					};
+					2CBC438C500195AC8D08C75B = {
+						LastSwiftMigration = 0820;
+					};
+				};
 			};
 			buildConfigurationList = 2CBC467355C72A2C4F73721C /* Build configuration list for PBXProject "Virtual Tourist" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -346,6 +354,7 @@
 				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -360,6 +369,7 @@
 				INFOPLIST_FILE = "Virtual TouristTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;
@@ -375,6 +385,7 @@
 				INFOPLIST_FILE = "Virtual TouristTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;
@@ -386,6 +397,7 @@
 				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};

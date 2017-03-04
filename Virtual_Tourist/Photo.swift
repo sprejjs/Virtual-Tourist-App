@@ -11,13 +11,13 @@ class Photo: NSManagedObject {
     @NSManaged var url: String
     @NSManaged var album: Album?
     
-    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
     
     init(url: String, context: NSManagedObjectContext){
-        let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
-        super.init(entity:entity, insertIntoManagedObjectContext: context)
+        let entity =  NSEntityDescription.entity(forEntityName: "Photo", in: context)!
+        super.init(entity:entity, insertInto: context)
         self.url = url
     }
 }

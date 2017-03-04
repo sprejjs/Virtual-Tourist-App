@@ -21,7 +21,7 @@ class MapViewWithZoom : MKMapView {
         }
     }
     
-    private func setCenterCoordinate(coordinate: CLLocationCoordinate2D, zoomLevel: Int, animated: Bool){
+    fileprivate func setCenterCoordinate(_ coordinate: CLLocationCoordinate2D, zoomLevel: Int, animated: Bool){
         let span = MKCoordinateSpanMake(0, 360 / pow(2, Double(zoomLevel)) * Double(self.frame.size.width) / 256)
         setRegion(MKCoordinateRegionMake(centerCoordinate, span), animated: animated)
     }
